@@ -1,0 +1,109 @@
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+screenGui.Name = "FreezeMooncatGui"
+screenGui.ResetOnSpawn = false
+
+-- Create Frame
+local frame = Instance.new("Frame")
+frame.Parent = screenGui
+frame.Size = UDim2.new(0, 300, 0, 200)
+frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(173, 216, 230)
+frame.BorderSizePixel = 2
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+
+-- Make the GUI movable
+local dragging = false
+local dragStart
+local startPos
+
+frame.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+frame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+-- Add Title
+local title = Instance.new("TextLabel")
+title.Parent = frame
+title.Size = UDim2.new(1, 0, 0.2, 0)
+title.Text = "Freeze Mooncat"
+title.TextColor3 = Color3.fromRGB(0, 0, 0)
+title.TextSize = 24
+title.BackgroundTransparency = 1
+title.TextAlign = Enum.TextXAlignment.Center
+
+-- Create a Loading label
+local loadingLabel = Instance.new("TextLabel")
+loadingLabel.Parent = frame
+loadingLabel.Size = UDim2.new(1, 0, 0.2, 0)
+loadingLabel.Text = "Loading..."
+loadingLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+loadingLabel.TextSize = 18
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.TextAlign = Enum.TextXAlignment.Center
+loadingLabel.Visible = false
+
+-- Create Buttons
+local freezeButton = Instance.new("TextButton")
+freezeButton.Parent = frame
+freezeButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+freezeButton.Position = UDim2.new(0.5, -120, 0.4, 0)
+freezeButton.Text = "Freeze Mooncat"
+freezeButton.TextSize = 18
+
+local movePetButton = Instance.new("TextButton")
+movePetButton.Parent = frame
+movePetButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+movePetButton.Position = UDim2.new(0.5, -120, 0.6, 0)
+movePetButton.Text = "Move Pet"
+movePetButton.TextSize = 18
+
+local resetButton = Instance.new("TextButton")
+resetButton.Parent = frame
+resetButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+resetButton.Position = UDim2.new(0.5, -120, 0.8, 0)
+resetButton.Text = "Reset"
+resetButton.TextSize = 18
+
+-- Function to simulate loading (3 seconds delay)
+local function showGuiAfterDelay()
+    loadingLabel.Visible = true
+    wait(3)
+    loadingLabel.Visible = false
+end
+
+-- Call the loading function
+spawn(showGuiAfterDelay)
+
+-- Button Actions
+freezeButton.MouseButton1Click:Connect(function()
+    print("Freeze Mooncat button clicked!")
+    -- Add your logic for freezing mooncat here
+end)
+
+movePetButton.MouseButton1Click:Connect(function()
+    print("Move Pet button clicked!")
+    -- Add your logic for moving the pet here
+end)
+
+resetButton.MouseButton1Click:Connect(function()
+    print("Reset button clicked!")
+    -- Add your reset logic here
+end)
